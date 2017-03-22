@@ -26,11 +26,13 @@ public class IntegrationTest extends TestSettings {
         LandingPage header = new LandingPage(driver);
         PaymentsPage paymentsPage = header.goToPaymentsPage();
         CommunnalPage communalPayments = paymentsPage.goToCommunalPage();
+
         communalPayments.setLocation("г. Москва");
         assertEquals(communalPayments.getElement(0).getText(), "ЖКУ-Москва");
         ZhkuMskPage zhkuMsk = communalPayments.clickOnGridElement(0);
         zhkuMsk.checkCodeValidation();
         zhkuMsk.checkDateValidation();
+
         header.goToPaymentsPage();
         paymentsPage.userLookupItem("ЖКУ-Москва").lookupHasResult().checkFirstItem("ЖКУ-Москва").userClicksOnFoundItem(0);
         header.goToPaymentsPage();
