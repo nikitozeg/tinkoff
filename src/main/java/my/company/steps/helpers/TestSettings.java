@@ -1,4 +1,4 @@
-package my.company.steps;
+package my.company.steps.helpers;
 
 
 import org.junit.After;

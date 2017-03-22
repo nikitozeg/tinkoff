@@ -1,5 +1,6 @@
 package my.company.steps;
 
+import my.company.steps.helpers.Common;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -7,9 +8,9 @@ import ru.yandex.qatools.allure.annotations.Step;
 
 import java.util.List;
 
-import static my.company.steps.Common.waitXpathElementVisible;
+import static my.company.steps.helpers.Common.waitXpathElementVisible;
 import static my.company.steps.LandingPage.currentURL1;
-import static my.company.steps.Locators.*;
+import static my.company.steps.helpers.Locators.*;
 import static org.junit.Assert.assertEquals;
 import static org.openqa.selenium.Keys.ENTER;
 
@@ -20,15 +21,15 @@ import static org.openqa.selenium.Keys.ENTER;
 public class PaymentsPage {
 
     private WebDriver driver;
-    static List<WebElement> list;
+    private static List<WebElement> list;
 
-    public PaymentsPage(WebDriver driver) {
+    PaymentsPage(WebDriver driver) {
         this.driver = driver;
         waitXpathElementVisible(COMMUN_PAYMENTS_LOCATOR, driver);
     }
 
     private By communalPaymentsLocator = By.xpath(COMMUN_PAYMENTS_LOCATOR);
-    By lookupLocator = By.xpath(LOOKUP_INPUT_LOCATOR);
+    private By lookupLocator = By.xpath(LOOKUP_INPUT_LOCATOR);
 
     @Step
     public PaymentsPage userLookupItem(String item) {
@@ -56,7 +57,6 @@ public class PaymentsPage {
         return new ZhkuMskPage(driver);
     }
 
-
     @Step
     public PaymentsPage lookupHasResult() {
         Common.checkValues(LOOKUP_RESULTS_LOCATOR, driver);
@@ -68,6 +68,4 @@ public class PaymentsPage {
         Common.clickOnElement(communalPaymentsLocator, driver);
         return new CommunnalPage(driver);
     }
-
-
 }

@@ -1,6 +1,7 @@
 package my.company.tests;
 
 import my.company.steps.*;
+import my.company.steps.helpers.TestSettings;
 import org.junit.Test;
 import ru.yandex.qatools.allure.annotations.Description;
 import ru.yandex.qatools.allure.annotations.Severity;
@@ -11,7 +12,6 @@ import static org.junit.Assert.assertEquals;
 
 /**
  * @author Nikita Ivanov tazg@ya.ru
- *
  */
 
 @Title("Suite contain positive and negative cases")
@@ -26,15 +26,17 @@ public class IntegrationTest extends TestSettings {
         LandingPage lp = new LandingPage(driver);
         PaymentsPage paymentsPage = lp.goToPaymentsPage();
         CommunnalPage crpage = paymentsPage.goToCommunalPage();
-        crpage.checkLocation("г. Москва");
+        crpage.setLocation("г. Москва");
         assertEquals(crpage.getElement(0).getText(), "ЖКУ-Москва");
-        ZhkuMskPage zk= crpage.clickOnGridElement(0);
+        ZhkuMskPage zk = crpage.clickOnGridElement(0);
         zk.checkCodeValidation();
         zk.checkDateValidation();
         lp.goToPaymentsPage();
         paymentsPage.userLookupItem("ЖКУ-Москва").lookupHasResult().checkFirstItem("ЖКУ-Москва").userClicksOnFoundItem(0);
-
-
+        lp.goToPaymentsPage();
+        paymentsPage.goToCommunalPage();
+        crpage.setLocation("г. Санкт-Петербург");
+        crpage.checkProviderIsAbsent("ЖКУ-Москва");
     }
 
 

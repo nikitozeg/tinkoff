@@ -4,11 +4,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import ru.yandex.qatools.allure.annotations.Step;
 
-import java.util.Arrays;
-import java.util.List;
-
-import static my.company.steps.Common.waitXpathElementVisible;
-import static my.company.steps.Locators.*;
+import static my.company.steps.helpers.Common.waitXpathElementVisible;
+import static my.company.steps.helpers.Locators.*;
+import static my.company.steps.helpers.TestData.*;
 import static org.junit.Assert.assertEquals;
 import static org.openqa.selenium.Keys.ENTER;
 
@@ -20,24 +18,22 @@ public class ZhkuMskPage {
     static String currentURL;
     private WebDriver driver;
 
-    public ZhkuMskPage(WebDriver driver) {
+    ZhkuMskPage(WebDriver driver) {
         this.driver = driver;
         waitXpathElementVisible(PAYERCODE_LOCATOR,driver);
     }
-
 
     @Step
     public void checkCodeValidation() {
 
         driver.findElement(By.xpath(PAYERCODE_LOCATOR)).sendKeys(ENTER);
-        assertEquals("Поле обязательное",driver.findElement(By.xpath(ERROR_MSG_LOCATOR)).getText());
+        assertEquals(mandatoryFieldMessage,driver.findElement(By.xpath(ERROR_MSG_LOCATOR)).getText());
 
-        List<String> messages = Arrays.asList("123456789", "12345678901", "Are", "You");
-        for (String value:messages) {
+        for (String value: payerCodeTestData) {
             driver.findElement(By.xpath(PAYERCODE_LOCATOR)).clear();
             driver.findElement(By.xpath(PAYERCODE_LOCATOR)).sendKeys(value);
             driver.findElement(By.xpath(PAYERCODE_LOCATOR)).sendKeys(ENTER);
-            assertEquals("Поле неправильно заполнено",driver.findElement(By.xpath(ERROR_MSG_LOCATOR)).getText());
+            assertEquals(incorrectFieldMessage,driver.findElement(By.xpath(ERROR_MSG_LOCATOR)).getText());
 
         }
         currentURL = driver.getCurrentUrl();
@@ -45,20 +41,15 @@ public class ZhkuMskPage {
 
     @Step
     public void checkDateValidation() {
+        //fill payerCode (to hide validation messages on PayerCode field)
         driver.findElement(By.xpath(PAYERCODE_LOCATOR)).clear();
-
         driver.findElement(By.xpath(PAYERCODE_LOCATOR)).sendKeys("1234567890");
 
-        List<String> messages = Arrays.asList("13.2015", "99.2017");
-        for (String value:messages) {
+        for (String value:periodCodeTestData) {
             driver.findElement(By.xpath(PERIOD_LOCATOR)).clear();
             driver.findElement(By.xpath(PERIOD_LOCATOR)).sendKeys(value);
             driver.findElement(By.xpath(PERIOD_LOCATOR)).sendKeys(ENTER);
-            assertEquals("Поле заполнено некорректно",driver.findElement(By.xpath(ERROR_MSG_LOCATOR)).getText());
-
+            assertEquals(incorrectField1Message,driver.findElement(By.xpath(ERROR_MSG_LOCATOR)).getText());
         }
-
     }
-
-
 }
