@@ -23,20 +23,20 @@ public class IntegrationTest extends TestSettings {
     @Description("Valid email and password")
     @Test
     public void lookAndFeelTest() throws Exception {
-        LandingPage lp = new LandingPage(driver);
-        PaymentsPage paymentsPage = lp.goToPaymentsPage();
-        CommunnalPage crpage = paymentsPage.goToCommunalPage();
-        crpage.setLocation("г. Москва");
-        assertEquals(crpage.getElement(0).getText(), "ЖКУ-Москва");
-        ZhkuMskPage zk = crpage.clickOnGridElement(0);
-        zk.checkCodeValidation();
-        zk.checkDateValidation();
-        lp.goToPaymentsPage();
+        LandingPage header = new LandingPage(driver);
+        PaymentsPage paymentsPage = header.goToPaymentsPage();
+        CommunnalPage communalPayments = paymentsPage.goToCommunalPage();
+        communalPayments.setLocation("г. Москва");
+        assertEquals(communalPayments.getElement(0).getText(), "ЖКУ-Москва");
+        ZhkuMskPage zhkuMsk = communalPayments.clickOnGridElement(0);
+        zhkuMsk.checkCodeValidation();
+        zhkuMsk.checkDateValidation();
+        header.goToPaymentsPage();
         paymentsPage.userLookupItem("ЖКУ-Москва").lookupHasResult().checkFirstItem("ЖКУ-Москва").userClicksOnFoundItem(0);
-        lp.goToPaymentsPage();
+        header.goToPaymentsPage();
         paymentsPage.goToCommunalPage();
-        crpage.setLocation("г. Санкт-Петербург");
-        crpage.checkProviderIsAbsent("ЖКУ-Москва");
+        communalPayments.setLocation("г. Санкт-Петербург");
+        communalPayments.checkProviderIsAbsent("ЖКУ-Москва");
     }
 
 
